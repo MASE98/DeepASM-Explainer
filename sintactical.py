@@ -34,7 +34,7 @@ def sintactical_debug(input_text):
         print(f"Token: '{token}', Type: '{token_type}'")
 
 #Funcion para procesar data
-def sintactical_data (context,ret):
+def sintactical_data1 (context,ret):
     print ("Entrando por sintactical_data..." +str(context.t) +"" +str(len(context.asm_t)) +"" +lexical.asm_get_token(context))
     while context.t < len (context.asm_t) and lexical.asm_get_token(context) != ".text":
         token = lexical.asm_get_token (context)
@@ -71,8 +71,10 @@ def sintactical (input_text):
         token = lexical.asm_get_token(context)
         print("probando...." +" " +str(token))
         if token == ".data":          
-           sintactical_data (context, ret)
+           sintactical_data1 (context, ret)
         else:
            sintactical_text (context, ret)
            
     return ret #hay que devolver un array de objetos
+
+# 
