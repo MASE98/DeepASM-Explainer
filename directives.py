@@ -38,7 +38,7 @@ def creasm_is_directive_kindof(text, kindof):
     if text not in as_directives:
         # print(f"ERROR: not defined directive: {text}\n")
         return False
-    return ws_directives[text]["kindof"] == kindof
+    return as_directives[text]["kindof"] == kindof
 
 def creasm_is_directive(text):
     return text in as_directives
