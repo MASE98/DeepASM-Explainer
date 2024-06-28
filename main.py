@@ -1,5 +1,5 @@
 import lexical
-import sintactical
+import sintacticals
 import sys
 import pprint
    
@@ -11,7 +11,7 @@ def read_file(file_path):
 #Funcion main    
 def main (file_path):
     input_text = read_file (file_path)
-    ret = sintactical.sintactical (input_text)
+    ret = sintacticals.sintactical (input_text)
     pprint.pprint(ret)
     
 #main

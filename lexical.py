@@ -83,7 +83,7 @@ def asm_get_token(context):
 
 #Get the type_token
 def asm_get_token_type(context):
-    return context.token_types[context.i] 
+    return context.token_types[context.i] #if context.i < len(context.token_types) else None
 
 #Verify if the token matches with the text
 def asm_is_token(context, text):
