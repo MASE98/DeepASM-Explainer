@@ -8,16 +8,15 @@ as_directives = {
     ".section": {"name": ".section", "kindof": "segment", "size": 0, "attrs": ["section"]},
     ".foo":     {"name": ".foo", "kindof": "segment", "size": 0, "attrs": ["foo"]},
     
-
     # tipos de datos
     ".byte":    {"name": ".byte", "kindof": "datatype", "size": 1, "attrs": ["numeric"]},
+    ".zero":    {"name": ".zero",   "kindof": "datatype", "size": 1, "attrs": ["space"]},
+    ".string":  {"name": ".string", "kindof": "datatype", "size": 1, "attrs": ["string"]},
     ".half":    {"name": ".half", "kindof": "datatype", "size": 2, "attrs": ["numeric"]},
     ".word":    {"name": ".word", "kindof": "datatype", "size": 4, "attrs": ["numeric"]},
-    ".dword":   {"name": ".dword", "kindof": "datatype", "size": 8, "attrs": ["numeric"]},
     ".float":   {"name": ".float", "kindof": "datatype", "size": 4, "attrs": ["numeric"]},
     ".double":  {"name": ".double", "kindof": "datatype", "size": 8, "attrs": ["numeric"]},
-    ".string":  {"name": ".string", "kindof": "datatype", "size": 1, "attrs": ["string"]},
-    ".zero":    {"name": ".zero",   "kindof": "datatype", "size": 1, "attrs": ["space"]},
+    ".dword":   {"name": ".dword", "kindof": "datatype", "size": 8, "attrs": ["numeric"]},
 
     # modificadores
     ".align":   {"name": ".align", "kindof": "datatype", "size": 0, "attrs": ["align"]},
