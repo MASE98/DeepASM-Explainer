@@ -133,3 +133,25 @@ def treat_control_sequences(possible_value):
         return ret
 
     return ret
+
+#******** ESTADO DEL SISTEMA *********
+sim = {
+    'systems': [],
+    'active': None,
+    'index': 0,
+}
+
+def ctrlStates_get():
+    if sim['active'] is not None:
+        return sim['active']['ctrl_states']
+    else:
+        return None
+
+#******** REEMPLAZO A UNA CADENA BASE *********
+def base_escapeRegExp(string):
+    #caracteres especiales para uso de expresiones regulares
+    return re.sub(r'[.*+?^${}()|[\]\\]', r'\\\g<0>', string)
+
+def base_replace_all(base_str, match, replacement):
+    return re.sub(base_escapeRegExp(match), replacement, base_str)
+
