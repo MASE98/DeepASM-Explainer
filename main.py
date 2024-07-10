@@ -2,6 +2,7 @@ import lexical
 import sintacticals
 import sys
 import pprint
+#import f_of_data_text
    
 #Funciona para leer fichero
 def read_file(file_path):
@@ -10,6 +11,7 @@ def read_file(file_path):
 
 #Funcion main    
 def main (file_path):
+    #f_of_data_text.initialize_active()
     input_text = read_file (file_path)
     ret = sintacticals.sintactical (input_text)
     pprint.pprint(ret)

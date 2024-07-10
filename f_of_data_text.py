@@ -142,10 +142,17 @@ sim = {
 }
 
 def ctrlStates_get():
-    if sim['active'] is not None:
-        return sim['active']['ctrl_states']
-    else:
-        return None
+    return sim['active']['ctrl_states']
+
+# def ctrlStates_get():
+#     if sim['active'] is not None and isinstance(sim['active'], dict) and 'ctrl_states' in sim['active']:
+#         return sim['active']['ctrl_states']
+#     else:
+#         raise ValueError("'active' no está definido correctamente o no contiene 'ctrl_states'")
+# def initialize_active():
+#     sim['active'] = {
+#         'ctrl_states': 'initial_value'  # Asigna un valor inicial adecuado
+#     }
 
 #******** REEMPLAZO A UNA CADENA BASE *********
 def base_escapeRegExp(string):
