@@ -136,7 +136,7 @@ def creasm_get_similar_candidates(context, elto):
 
     for key in context.assembly:
         if (key in elto['value']['instruction']) or (elto['value']['instruction'] in key):
-            # Asegurándonos de que context.assembly[key] sea un iterable
+            #Se asegura que context.assembly[key] sea un iterable
             if isinstance(context.assembly[key], list):
                 for entry in context.assembly[key]:
                     msg += "<span class='m-1'>\u2714</span> " + entry['signature_user'] + "<br>"
@@ -166,8 +166,8 @@ def creasm_encode_instruction(context, ret, elto, candidate):
     n_bits = 0
     value = 0
     val_encoded = ""
-    arr_encoded = ""
-    #arr_encoded = []
+    #arr_encoded = ""
+    arr_encoded = []
     ret1 = None
     bit_size = 0
 
@@ -225,7 +225,7 @@ def creasm_encode_instruction(context, ret, elto, candidate):
             value = elto['value']['fields'][j]
             if value[0] == '(':
                 value = value.replace('(', '').replace(')', '')
-            value = context.register[value]#['register'][value]
+            value = context.register[value]
             value = bin(value)[2:]
             value = value.zfill(n_bits)
         else:
@@ -299,7 +299,7 @@ def creasm_text_instr_op_match(context, ret, elto, atom, parentheses):
     opx = ''
     #result = {'error': None}
 
-    if atom in context.register: #['register']:
+    if atom in context.register:
         if parentheses:
             elto['value']['fields'].append(f'({atom})')
             elto['value']['signature_type_arr'].append('(reg)')
@@ -329,7 +329,7 @@ def creasm_text_instr_op_match(context, ret, elto, atom, parentheses):
         
         elto['value']['signature_size_arr'].append(a[2])
 
-        return ret #ret
+        return ret
     
     if parentheses:
         elto['value']['fields'].append(f'({atom})')
@@ -340,7 +340,7 @@ def creasm_text_instr_op_match(context, ret, elto, atom, parentheses):
 
     elto['value']['signature_size_arr'].append(1)
 
-    return ret #ret
+    return ret
 
 #OBTIENE UNIDAD BASICA DE UNA INSTRUCI'ON
 def creasm_text_ops_getAtom(context, pseudo_context):
@@ -374,7 +374,6 @@ def creasm_text_elto_fields(context, ret, elto, pseudo_context):
 
     print(f"Inicio de creasm_text_elto_fields, ret: {ret}")
 
-    #***CREAR LA FUNCION getAtom con este nombre : creasm_text_ops_getAtom***
     opx = creasm_text_ops_getAtom(context, pseudo_context)
 
     while opx != '' and len(elto['value']['fields']) < 100:
@@ -418,9 +417,7 @@ def creasm_text_elto_fields(context, ret, elto, pseudo_context):
             
             a = datatypes.dt_get_imm_value(sel['label'])
             if a['isDecimal']:
-                #**CREAR FUNCION VALBIN: creasm_get_sel_valbin
                 valbin = creasm_get_sel_valbin(sel['label'], sel['start'], sel['stop'])
-                #** CREAR FUNCION: dt_binary2format
                 atom = datatypes.dt_binary2format(valbin,a['format'])
             else:
                 if not creasm_is_ValidTag(sel['label']):
@@ -442,17 +439,19 @@ def creasm_text_elto_fields(context, ret, elto, pseudo_context):
             
         #**CREAR FUNCION MATCH
         ret1 = creasm_text_instr_op_match(context,ret,elto,atom,par)
-        print(f"Después de creasm_text_instr_op_match, ret: {ret}, ret1: {ret1}")  # Añad
+        print(f"Después de creasm_text_instr_op_match, ret: {ret}, ret1: {ret1}")
         if ret1.get('error') is not None:
-            ret[0]['error'] = ret1['error'] #Asigna el error al diccionario correcto dentro de ret
-            print(f"Error encontrado, ret: {ret}")  # Añadido para verificar ret
+            #Asigna el error al diccionario de ret
+            ret[0]['error'] = ret1['error'] 
+            #Se verifica ret
+            print(f"Error encontrado, ret: {ret}")
             return ret
         
         opx = creasm_text_ops_getAtom(context, pseudo_context)
         if opx == ',':
             while opx == ',':
                 opx = creasm_text_ops_getAtom(context,pseudo_context)
-        elif opx != '' and context.options['mandatory_comma']: #['options']['mandatory_comma']:
+        elif opx != '' and context.options['mandatory_comma']:#['options']['mandatory_comma']:
             return lexical.asm_lang_error(context, f_of_data_text.i18n_getTagFor('compiler', 'COMMA NOT FOUND'))
         
     if len(elto['value']['fields']) > 100:
@@ -462,11 +461,11 @@ def creasm_text_elto_fields(context, ret, elto, pseudo_context):
                                f_of_data_text.i18n_getTagFor('compiler', 'CHECK CODE'))
     
     elto['value']['signature_type_str'] = ' '.join(elto['value']['signature_type_arr'])
-    elto['value']['signature_size_str'] = ' '.join(map(str, elto['value']['signature_size_arr']))#.join(elto['value']['signature_size_arr']) convierte entero a cadena
-    #CREAR wsasm_make_signature_user con el nombre: creasm_signature_user
+    elto['value']['signature_size_str'] = ' '.join(elto['value']['signature_size_arr']) #convierte entero a cadena .join(map(str, elto['value']['signature_size_arr']))
     elto['value']['signature_user'] = creasm_signature_user(elto['value'],'+')
 
-    print(f"Finalizando creasm_text_elto_fields, ret: {ret}")  # Añadido para verificar ret al final
+    #Se verifica el ret al final
+    print(f"Finalizando creasm_text_elto_fields, ret: {ret}")  
     return ret
 
 #********** DATA **********
@@ -506,7 +505,7 @@ def sintactical_data (context, ret):
         possible_tag = ""
         #NOT.text/.data y final de fichero
         while not directives.creasm_is_directive_datatype(lexical.asm_get_token(context)) and not lexical.creasm_is_end_of_file(context):
-            #extrae y lo almacena en possible_tag
+            #Extrae y lo almacena en possible_tag
             possible_tag = lexical.asm_get_token(context)            
             print(f"Etiqueta posible: {possible_tag}, Índice: {context.t}")
 
@@ -635,10 +634,6 @@ def sintactical_data (context, ret):
                 if lexical.asm_get_token(context) == ",":
                     lexical.asm_next_token(context)
 
-                #if directives.creasm_is_directive(lexical.asm_get_token(context)) or lexical.asm_get_token_type(context) == "TAG" or lexical.asm_get_token(context)[0] == ".":
-                #Se comprueba si el token es una directiva
-                #Se no es una directiva, se comprueba si el tipo del token es "TAG".
-                #Si el tipo no es "TAG", entonces se verifica si el token es válido y si el primer carácter es un punto ('.').
                 if directives.creasm_is_directive(lexical.asm_get_token(context)) or lexical.asm_get_token_type(context) == "TAG" or lexical.asm_get_token(context) and lexical.asm_get_token(context)[0] == ".":
                     break
                 #Finaliza el bluce luego de leer una etiqueta (TAG) o directiva (directive)
@@ -693,7 +688,7 @@ def sintactical_data (context, ret):
             elto['comments'].append(acc_cmt)
             elto['byte_size'] = align_offest
             elto['value'] = possible_value
-            elto['source_alt'] = elto['datatype'] + ' ' + str(possible_value) #revisar
+            elto['source_alt'] = elto['datatype'] + ' ' + str(possible_value)
 
             ret[0].setdefault('obj', []).append(elto)
             elto = creasm_new_objEl(None)
@@ -744,9 +739,6 @@ def sintactical_data (context, ret):
                     if lexical.asm_get_token(context) == ",":
                         lexical.asm_next_token(context)
 
-                    #token = lexical.asm_get_token(context)
-                    #directives.creasm_is_directive(lexical.asm_get_token(context)) or lexical.asm_get_token_type(context) == "TAG" or (token and token[0] == "."): 
-                    
                     #Verificamos si la cadena está vacía antes de seguir accediendo:
                     #Se comprueba si el token es una directiva
                     #Se no es una directiva, se comprueba si el tipo del token es "TAG".
@@ -764,10 +756,6 @@ def sintactical_data (context, ret):
             return lexical.asm_lang_error(context, f_of_data_text.i18n_getTagFor('compiler', 'UNEXPECTED DATATYPE') + "'" + elto['datatype']+ "'")
                 
     return ret
-        # Asegurar avance del contexto después de procesar un token de tipo de datos
-        #lexical.asm_next_token(context)
-        #print(f"Índice después de procesar tipo de dato: {context.t}")
-    #return ret
 
 #******** TEXT ********
 def sintactical_text(context, ret):
@@ -778,11 +766,11 @@ def sintactical_text(context, ret):
     elto = None
     candidate = None
 
-    #xr_info = f_of_data_text.ctrlStates_get()
+    # xr_info = f_of_data_text.ctrlStates_get()
     # if xr_info is None:
     #     raise ValueError("ctrlStates_get devolvió None")
     # oc_size = int(xr_info.get('ir', {}).get('default_eltos', {}).get('oc', 0))
-    #oc_size = int(xr_info['ir']['default_eltos']['oc'])
+    # oc_size = int(xr_info['ir']['default_eltos']['oc'])
 
     #.text - .text
     #.data - label1: instr op1 op2 op3
@@ -793,7 +781,7 @@ def sintactical_text(context, ret):
     print(f"Índice después de avanzar desde segmento: {context.t}")
 
     elto = creasm_new_objEl (None)
-    elto ["seg_name"] = seg_name #["seg_name"]
+    elto ["seg_name"] = seg_name
     elto['endian'] = context.endian
 
     #.text - .text
@@ -835,7 +823,7 @@ def sintactical_text(context, ret):
             lexical.asm_next_token(context)
         elto['associated_context'] = lexical.asm_get_label_context(context)
 
-        #se comprueba si se ha alcanzado el final del archivo
+        #Se comprueba si se ha alcanzado el final del archivo
         if lexical.creasm_is_end_of_file(context):
             if elto['labels']:
                 ret[0].setdefault('obj', []).append(elto)
@@ -851,12 +839,9 @@ def sintactical_text(context, ret):
             'signature_size_arr': [],
             'signature_user': ''
         }
-        #elto['value']['instruction'] = possible_inst
         elto['assembly_reference'] = context.assembly.get(possible_inst,[]) #[possible_inst]
         if not isinstance(elto['assembly_reference'],list):
             elto['assembly_reference'] = []
-        #elto['value']['fields'] = []
-        #elto['value']['signature_type_arr'] = [possible_inst]
         #elto['value']['signature_size_arr'] = [oc_size]
 
         #
@@ -865,9 +850,10 @@ def sintactical_text(context, ret):
         print("Estructura inicial de elto:", elto)
         ret = creasm_text_elto_fields(context, ret , elto, None)
         print("Estructura final de elto:", elto)
-        #if ret['error'] is not None:
+
         print(f"Verificación de ret en línea 857: {ret}")
-        if ret[0].get('error') is not None: #Se asegura de acceder al diccionario correcto dentro de ret
+        #Nos aseguramos que acceda al diccionario dentro de ret
+        if ret[0].get('error') is not None:
             return ret
         
         if elto['value']['fields']:
@@ -884,9 +870,9 @@ def sintactical_text(context, ret):
         ret = creasm_candidates_instr(context, ret, elto)
         print(f"Verificación de ret después de creasm_candidates_instr: {ret}")
 
-        #if ret['error'] is not None:
         print(f"Verificación de ret en línea 874: {ret}")
-        if ret[0].get('error') is not None: #Se asegura de acceder al diccionario correcto dentro de ret
+        #Nos aseguramos que acceda al diccionario dentro de ret
+        if ret[0].get('error') is not None:
             return ret
         
         candidate = elto['assembly_reference'][elto['assembly_reference_index']]
@@ -904,8 +890,6 @@ def sintactical_text(context, ret):
         ret[0].setdefault('obj',[]).append(elto)
 
         elto = creasm_new_objEl(elto)
-        #lexical.asm_next_token(context)
-        #print(f"Índice después de procesar tipo de dato: {context.t}")
     return ret
 
 #********** CATCH DE SINTACTICAL DATA AND TEXT **********
@@ -913,16 +897,10 @@ def sintactical_text(context, ret):
 def sintactical (input_text):
     #Inicializa el contexto con el texto
     context = Context (input_text)
-    #context.t = 0
-    #ret = []
+
     ret = [{}] #ret como lista que contiene un dicionario vacio
     ret[0]['labels_asm'] = {} #labels_asm dentro de la lista
     ret[0]['error'] = None
-    #ret = {
-        #'labels_asm': {}
-    #}
-
-    #context = lexical.asm_next_token(context)
     
     #Tokeniza el texto de entrada    
     while not lexical.creasm_is_end_of_file(context):
@@ -934,15 +912,8 @@ def sintactical (input_text):
         print(f"Verificación de ret antes de procesar token: {ret}")
         print("Probando Token:" +" " +str(token))
 
-        
         if token == ".data":     
            sintactical_data (context, ret)
         else:
-             sintactical_text(context,ret)
-        #elif token == ".text":
-              #sintactical_text(context,ret)
-        #else:
-              #lexical.creasm_is_end_of_file(context)
-              #print("FIN \n")
-      
+             sintactical_text(context,ret)      
     return ret #hay que devolver un array de objetos
