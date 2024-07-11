@@ -136,12 +136,16 @@ def creasm_get_similar_candidates(context, elto):
 
     for key in context.assembly:
         if (key in elto['value']['instruction']) or (elto['value']['instruction'] in key):
-            for entry in context.assembly[key]:
-                msg += "<span class='m-1'>\u2714</span> " + entry['signature_user'] + "<br>"
+            # Asegurándonos de que context.assembly[key] sea un iterable
+            if isinstance(context.assembly[key], list):
+                for entry in context.assembly[key]:
+                    msg += "<span class='m-1'>\u2714</span> " + entry['signature_user'] + "<br>"
+            else:
+                msg += "<span class='m-1'>\u2714</span> " + str(context.assembly[key]) + "<br>"
     
     msg += f_of_data_text.i18n_getTagFor('compiler', 'CHECKS')
 
-    return msg 
+    return msg
 
 #
 def creasm_encoded_field(arr_encoded, value, start_bit, stop_bit):
@@ -151,7 +155,7 @@ def creasm_encoded_field(arr_encoded, value, start_bit, stop_bit):
         for k in range(start_bit[m],stop_bit[m] + 1):
             if val_i >= len(value):
                 print("creasm_encoded_field: value.length < encode space :-)")
-                #return
+                return
             arr_encoded[k] = value[val_i]
             val_i += 1
 
@@ -265,7 +269,8 @@ def creasm_candidates_instr(context, ret, elto):
     elto['assembly_reference_index'] = 0
 
     if not elto['assembly_reference']:
-        return creasm_eltoErro(context,elto,"NO ASSEMBLY REFERENCE FOUND")
+        ret[0]['error'] = "NO ASSEMBLY REFERENCE FOUND"
+        #return creasm_eltoErro(context,elto,"NO ASSEMBLY REFERENCE FOUND")
 
     for i in range(len(elto['assembly_reference'])):
         distance = creasm_text_getDistance(elto['assembly_reference'][i], elto['value'])
@@ -281,7 +286,9 @@ def creasm_candidates_instr(context, ret, elto):
     
     if candidates == 0:
         msg = creasm_get_similar_candidates(context, elto)
-        return creasm_eltoErro(context, elto, msg)
+        #return creasm_eltoErro(context, elto, msg)
+        ret[0]['error'] = msg 
+        return ret
     
     elto['byte_size'] = elto['assembly_reference'][elto['assembly_reference_index']]['nwords'] * WORD_BYTES
     
@@ -290,7 +297,7 @@ def creasm_candidates_instr(context, ret, elto):
 #CLASIFICACION DE OPERANDOS
 def creasm_text_instr_op_match(context, ret, elto, atom, parentheses):
     opx = ''
-    result = {'error': None}
+    #result = {'error': None}
 
     if atom in context.register: #['register']:
         if parentheses:
@@ -302,7 +309,7 @@ def creasm_text_instr_op_match(context, ret, elto, atom, parentheses):
 
         elto['value']['signature_size_arr'].append(len(bin(context.register[atom])[2:]))#['register'][atom])[2:]))
 
-        return result #ret
+        return ret #result
     
     ret1 = datatypes.dt_get_imm_value(atom)
     if ret1['isDecimal'] or ret1['isFloat']:
@@ -322,7 +329,7 @@ def creasm_text_instr_op_match(context, ret, elto, atom, parentheses):
         
         elto['value']['signature_size_arr'].append(a[2])
 
-        return result #ret
+        return ret #ret
     
     if parentheses:
         elto['value']['fields'].append(f'({atom})')
@@ -333,7 +340,7 @@ def creasm_text_instr_op_match(context, ret, elto, atom, parentheses):
 
     elto['value']['signature_size_arr'].append(1)
 
-    return result #ret
+    return ret #ret
 
 #OBTIENE UNIDAD BASICA DE UNA INSTRUCI'ON
 def creasm_text_ops_getAtom(context, pseudo_context):
@@ -364,6 +371,8 @@ def creasm_text_elto_fields(context, ret, elto, pseudo_context):
     opx = ''
     atom = ''
     par = False
+
+    print(f"Inicio de creasm_text_elto_fields, ret: {ret}")
 
     #***CREAR LA FUNCION getAtom con este nombre : creasm_text_ops_getAtom***
     opx = creasm_text_ops_getAtom(context, pseudo_context)
@@ -433,9 +442,11 @@ def creasm_text_elto_fields(context, ret, elto, pseudo_context):
             
         #**CREAR FUNCION MATCH
         ret1 = creasm_text_instr_op_match(context,ret,elto,atom,par)
+        print(f"Después de creasm_text_instr_op_match, ret: {ret}, ret1: {ret1}")  # Añad
         if ret1.get('error') is not None:
             ret[0]['error'] = ret1['error'] #Asigna el error al diccionario correcto dentro de ret
-            return ret1
+            print(f"Error encontrado, ret: {ret}")  # Añadido para verificar ret
+            return ret
         
         opx = creasm_text_ops_getAtom(context, pseudo_context)
         if opx == ',':
@@ -455,6 +466,7 @@ def creasm_text_elto_fields(context, ret, elto, pseudo_context):
     #CREAR wsasm_make_signature_user con el nombre: creasm_signature_user
     elto['value']['signature_user'] = creasm_signature_user(elto['value'],'+')
 
+    print(f"Finalizando creasm_text_elto_fields, ret: {ret}")  # Añadido para verificar ret al final
     return ret
 
 #********** DATA **********
@@ -531,7 +543,7 @@ def sintactical_data (context, ret):
         if lexical.creasm_is_end_of_file(context):
             #Si terminca en 'label' pero sin valores
             if elto ['labels']:
-                ret [0].setdefault('obj', [].append(elto))
+                ret[0].setdefault('obj', []).append(elto)
             break
 
         #    
@@ -615,7 +627,7 @@ def sintactical_data (context, ret):
                 elto['source_alt'] = elto['datatype'] + ' ' + possible_value
                 elto['format'] = ret1['format']
 
-                ret [0].setdefault('obj', []).append(elto)
+                ret[0].setdefault('obj', []).append(elto)
                 elto = creasm_new_objEl(elto)
 
                 #Por si detecta una ','
@@ -760,7 +772,6 @@ def sintactical_data (context, ret):
 #******** TEXT ********
 def sintactical_text(context, ret):
     possible_tag = ""
-    possible_value = ""
     possible_inst = ""
     tag = ""
     acc_cmt = ""
@@ -827,7 +838,7 @@ def sintactical_text(context, ret):
         #se comprueba si se ha alcanzado el final del archivo
         if lexical.creasm_is_end_of_file(context):
             if elto['labels']:
-                ret [0].setdefault('obj', [].append(elto))
+                ret[0].setdefault('obj', []).append(elto)
             break
 
         possible_inst = lexical.asm_get_token(context)
@@ -851,9 +862,11 @@ def sintactical_text(context, ret):
         #
         #label: instr op1 op2 op3
         #
-        
+        print("Estructura inicial de elto:", elto)
         ret = creasm_text_elto_fields(context, ret , elto, None)
+        print("Estructura final de elto:", elto)
         #if ret['error'] is not None:
+        print(f"Verificación de ret en línea 857: {ret}")
         if ret[0].get('error') is not None: #Se asegura de acceder al diccionario correcto dentro de ret
             return ret
         
@@ -867,8 +880,12 @@ def sintactical_text(context, ret):
         elto['comments'].append(acc_cmt)
         elto['track_source'].append(elto['source'])
 
+        print(f"Verificación de ret antes de creasm_candidates_instr: {ret}")
         ret = creasm_candidates_instr(context, ret, elto)
+        print(f"Verificación de ret después de creasm_candidates_instr: {ret}")
+
         #if ret['error'] is not None:
+        print(f"Verificación de ret en línea 874: {ret}")
         if ret[0].get('error') is not None: #Se asegura de acceder al diccionario correcto dentro de ret
             return ret
         
@@ -914,6 +931,7 @@ def sintactical (input_text):
         print(f"Índice después de next_token: {context.t}")
         token = lexical.asm_get_token(context)
         print(f"Token actual: {token}, Índice: {context.t}")
+        print(f"Verificación de ret antes de procesar token: {ret}")
         print("Probando Token:" +" " +str(token))
 
         
