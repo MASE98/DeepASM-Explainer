@@ -363,6 +363,13 @@ def sintactical_data (context, ret):
                 
     return ret
 
+def filter_fields(fields):
+    fiels_filtrados = []
+    for field in fields:
+        if isinstance(field, dict) and field.get('type') not in ['co', 'cop']:
+            fiels_filtrados.append(field)
+    return fiels_filtrados #[field for field in fields if isinstance(field, dict) and field.get('type') not in ['co', 'cop']]
+
 #******** TEXT ********
 def sintactical_text(context,ret,creator_arch):
     possible_tag = ""
@@ -371,7 +378,6 @@ def sintactical_text(context,ret,creator_arch):
     acc_cmt = ""
     elto = None
     candidate = None
-
 
     print(f"Entrando a sintactical_text: {context.t}")
     seg_name = lexical.asm_get_token(context)
@@ -438,15 +444,25 @@ def sintactical_text(context,ret,creator_arch):
         item = None
         for item in creator_arch['instructions']:
             if item['name'] == possible_inst:
+               #Filtrar los fields según el criterio de tipo
+               elto['value']['fields'] = filter_fields(elto['value']['fields'])
                break 
-        if item['name'] != possible_inst:
-             print("error....")
+        # if item['name'] != possible_inst:
+        #      print("Error: Instruccion no reconocida...")
+        
+        #Instrucción Válida
+        if item is None or item['name'] != possible_inst:
+            print("Error: Instrucción no reconocida...")
+            lexical.asm_next_token(context)
+            continue
 
         j = 0
         while j<len(item['fields']):
             possible_field = lexical.asm_get_token(context)
             elto['value']['fields'].append(possible_field)
             j = j + 1
+
+
         
         ret[0].setdefault('obj',[]).append(elto)
 
