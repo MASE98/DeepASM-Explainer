@@ -442,19 +442,40 @@ def sintactical_text(context,ret,creator_arch):
         #elto['value']['signature_size_arr'] = [oc_size]
 
         item = None
-        for item in creator_arch['instructions']:
-            if item['name'] == possible_inst:
-               #Filtrar los fields según el criterio de tipo
-               elto['value']['fields'] = filter_fields(elto['value']['fields'])
-               break 
-        # if item['name'] != possible_inst:
-        #      print("Error: Instruccion no reconocida...")
-        
-        #Instrucción Válida
-        if item is None or item['name'] != possible_inst:
+        isPseudoinstruction = False
+
+        for instr in creator_arch['instructions']:
+            if instr['name'] == possible_inst:
+                item = instr
+                elto['value']['fields'] = filter_fields(elto['value']['fields'])
+                break
+
+        if item is None:
+            for pseudo in creator_arch.get('pseudoinstructions', []):
+                if pseudo['name'] == possible_inst:
+                    item = pseudo
+                    isPseudoinstruction = True
+                    elto['value']['fields'] = filter_fields(elto['value']['fields'])
+                    break
+
+        #Se valida instrucciones y pseudoinstrucciones
+        if item is None:
             print("Error: Instrucción no reconocida...")
             lexical.asm_next_token(context)
             continue
+
+        # Si es una instrucción real
+        if not isPseudoinstruction:
+            elto['datatype'] = "instruction"
+            elto['value']['signature_size_arr'] = [len(elto['value']['signature_type_arr'])]
+            #Llama a la función para generar el binario (standby)
+            elto['binary'] = "binary_encoding_of_instruction"
+                        
+        # Si es una pseudoinstrucción
+        else:
+            elto['datatype'] = "pseudoinstruction"
+            elto['value']['signature_size_arr'] = [0]
+            elto['binary'] = ""
 
         j = 0
         while j<len(item['fields']):
@@ -462,14 +483,12 @@ def sintactical_text(context,ret,creator_arch):
             elto['value']['fields'].append(possible_field)
             j = j + 1
 
-
-        
         ret[0].setdefault('obj',[]).append(elto)
 
         elto = creasm_new_objEl(elto)
         lexical.asm_next_token(context)
         
-    return ret        
+    return ret    
 
 #********** CATCH DE SINTACTICAL DATA AND TEXT **********
 #Funcion para analizar el sintactical de datos y texto
