@@ -458,20 +458,20 @@ def sintactical_text(context,ret,creator_arch):
                     elto['value']['fields'] = filter_fields(elto['value']['fields'])
                     break
 
-        #Se valida instrucciones y pseudoinstrucciones
+        #Se valida una instrucciones y pseudoinstrucciones
         if item is None:
             print("Error: Instrucción no reconocida...")
             lexical.asm_next_token(context)
             continue
 
-        # Si es una instrucción real
+        #Si es una instrucción
         if not isPseudoinstruction:
             elto['datatype'] = "instruction"
             elto['value']['signature_size_arr'] = [len(elto['value']['signature_type_arr'])]
             #Llama a la función para generar el binario (standby)
             elto['binary'] = "binary_encoding_of_instruction"
                         
-        # Si es una pseudoinstrucción
+        #Si es una pseudoinstrucción
         else:
             elto['datatype'] = "pseudoinstruction"
             elto['value']['signature_size_arr'] = [0]
