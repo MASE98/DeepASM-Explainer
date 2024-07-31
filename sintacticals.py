@@ -90,11 +90,11 @@ def sintactical_data (context, ret):
 
     #.data
     #.text - label1: .directive "value"
-    print(f"Entrando en sintactical_data con: {context.t}")
+    #print(f"Entrando en sintactical_data con: {context.t}")
     seg_name = lexical.asm_get_token(context)
-    print(f"Segmento encontrado: {seg_name}")
+    #print(f"Segmento encontrado: {seg_name}")
     lexical.asm_next_token(context)
-    print(f"Índice después de avanzar desde segmento: {context.t}")
+    #print(f"Índice después de avanzar desde segmento: {context.t}")
 
     elto = creasm_new_objEl (None)
     elto ["seg_name"] = seg_name
@@ -107,7 +107,7 @@ def sintactical_data (context, ret):
         #label1:
         #label2 : .double 
         token = lexical.asm_get_token(context)
-        print(f"Token dentro de sintactical_data: {token}, Índice: {context.t}")
+        #print(f"Token dentro de sintactical_data: {token}, Índice: {context.t}")
 
         acc_cmt = lexical.asm_get_comments(context)
         lexical.asm_reset_comments(context)
@@ -118,7 +118,7 @@ def sintactical_data (context, ret):
         while not directives.creasm_is_directive_datatype(lexical.asm_get_token(context)) and not lexical.creasm_is_end_of_file(context):
             #Extrae y lo almacena en possible_tag
             possible_tag = lexical.asm_get_token(context)            
-            print(f"Etiqueta posible: {possible_tag}, Índice: {context.t}")
+            #print(f"Etiqueta posible: {possible_tag}, Índice: {context.t}")
 
             #Verifica etiqueta TAG
             if "TAG" != lexical.asm_get_token_type(context):
@@ -143,7 +143,7 @@ def sintactical_data (context, ret):
 
             #Si es .datatype y avanza al otro tag
             lexical.asm_next_token(context)
-            print(f"Índice después de avanzar (data): {context.t}")
+            #print(f"Índice después de avanzar (data): {context.t}")
 
         elto ['associated_context'] = lexical.asm_get_label_context(context)
 
@@ -379,11 +379,11 @@ def sintactical_text(context,ret,creator_arch):
     elto = None
     candidate = None
 
-    print(f"Entrando a sintactical_text: {context.t}")
+    #print(f"Entrando a sintactical_text: {context.t}")
     seg_name = lexical.asm_get_token(context)
-    print(f"Segmento encontrado: {seg_name}")
+    #print(f"Segmento encontrado: {seg_name}")
     lexical.asm_next_token(context)
-    print(f"Indice despues de avanzar desde segmento: {context.t}")
+    #print(f"Indice despues de avanzar desde segmento: {context.t}")
 
     elto = creasm_new_objEl(None)
     elto['seg_name'] = seg_name #".text"
@@ -393,7 +393,7 @@ def sintactical_text(context,ret,creator_arch):
     #token = lexical.asm_get_token(context)
     while not directives.creasm_is_directive_segment(lexical.asm_get_token(context)) and not lexical.creasm_is_end_of_file(context):
         token = lexical.asm_get_token(context)
-        print(f"Token dentro de sintactical text: {token}, I: {context.t}")
+        #print(f"Token dentro de sintactical text: {token}, I: {context.t}")
 
         acc_cmt = lexical.asm_get_comments(context)
         lexical.asm_reset_comments(context)
@@ -460,7 +460,7 @@ def sintactical_text(context,ret,creator_arch):
 
         #Se valida una instrucciones y pseudoinstrucciones
         if item is None:
-            print("Error: Instrucción no reconocida...")
+            #print("Error: Instrucción no reconocida...")
             lexical.asm_next_token(context)
             continue
 
@@ -505,16 +505,16 @@ def sintactical (input_text):
     ret[0]['labels_asm'] = {} #labels_asm dentro de la lista
     ret[0]['error'] = None
 
-    print(f"Índice antes de next_token: {context.t}")
+    #print(f"Índice antes de next_token: {context.t}")
     context = lexical.asm_next_token(context)
 
     #Tokeniza el texto de entrada    
     while not lexical.creasm_is_end_of_file(context):
-        print(f"Índice después de next_token: {context.t}")
+        #print(f"Índice después de next_token: {context.t}")
         token = lexical.asm_get_token(context)
-        print(f"Token actual: {token}, Índice: {context.t} \n")
-        print(f"Verificación de ret antes de procesar token: {ret} \n")
-        print("Probando Token:" +" " +str(token))
+        #print(f"Token actual: {token}, Índice: {context.t} \n")
+        #print(f"Verificación de ret antes de procesar token: {ret} \n")
+        #print("Probando Token:" +" " +str(token))
 
         if token == ".data":     
            sintactical_data (context, ret)
