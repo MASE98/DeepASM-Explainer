@@ -10,8 +10,6 @@ Este proyecto implementa un compilador para ensamblador RISC-V que utiliza un mo
   - [Ejecución Local](#ejecución-local)
   - [Uso del Servicio REST](#uso-del-servicio-rest)
 - [Ejemplo](#ejemplo)
-- [Contribuciones](#contribuciones)
-- [Licencia](#licencia)
 
 
 ## Estructura del Proyecto
@@ -38,8 +36,8 @@ Este proyecto implementa un compilador para ensamblador RISC-V que utiliza un mo
 1. **Clonar el repositorio:**
    ```bash
    git clone https://github.com/MASE98/ASMCompiler.git
-
    ```
+   ```bash
    cd ASMCompiler
    
 2. **Instalación de dependencia:**
@@ -52,14 +50,70 @@ Este proyecto implementa un compilador para ensamblador RISC-V que utiliza un mo
 
 ## USO
 
+### Ejecución Local
+
 - Se comienza iniciando el servicio REST:
 
    ```bash
    python3 servicio_rest.py
    ```
 
-- Luego se ejecutar el compilador localmente proporcionando un archivo ensamblador como entrada
+- Luego se ejecutar el compilador localmente proporcionando un archivo ensamblador como entrada.
 
    ```bash
    python3 main.py text.s
+
+Esta ejecucion dara una respuesta que incluirá un análisis del código y una sugerencia en caso de detectar un error.
+
+## Ejemplo
+Este ejemplo es una suma de dos valores en lenguaje ensamblador que utiliza conjunto de instrucciones RISC-V:
+
+    ```bash
+    .text
+    main:
+
+        li t0, 5
+        li t1, 13
+
+        add t4, t0, t1  # 5+13
+        
+        mv a0, t4
+        li a7, 1
+        ecall
+    
+        # return 
+        jr ra
+    ``` 
+
+- Mediante el fichero que contenga el programa en lenguaje ensamblador y utilizando los comando expuesto en la ejecución local
+- Se obtendria algo como esto:
+
+    ```bash
+    [{'error': None,
+    'labels_asm': {'main': 0},
+    'obj': [{'assembly_reference': None,
+            'assembly_reference_index': -1,
+            'associated_context': {'line': 4, 'newlines': [9, 19, 20], 't': 31},
+            'binary': '',
+            'byte_size': 4,
+            'comments': [],
+            'datatype': 'pseudoinstruction',
+            'endian': 'little',
+            'format': '',
+            'labels': ['main'],
+            'pending': [],
+            'seg_name': '.text',
+            'track_source': [],
+            'value': {'fields': ['li', 'li'],
+                        'instruction': 'li',
+                        'signature_size_arr': [0],
+                        'signature_type_arr': ['li']}},
+            {'assembly_reference': None,
+            'assembly_reference_index': -1,
+            'associated_context': {'line': 5,
+                                    'newlines': [9, 19, 20, 37],
+                                    't': 48},
+
+
+
 
