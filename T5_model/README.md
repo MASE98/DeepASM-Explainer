@@ -1,64 +1,44 @@
-# -T5-Model
+# Detección y corrección de errores en ensamblador con modelo T5
 
-# T5-Based Assembler Error Detection and Correction
 
-This repository contains a project that leverages the T5 model to analyze RISC-V assembly language and provide feedback on potential errors. The system is integrated with a REST service for efficient and scalable use. 
+## Tabla de Contenidos
+1. [Resumen del Proyecto](#resumen-del-proyecto)
+2. [Requisitos](#requisitos)
+3. [Instalación](#instalación)
 
-## Table of Contents
-1. [Project Overview](#project-overview)
-2. [Requirements](#requirements)
-3. [Installation](#installation)
-4. [Usage](#usage)
-    - [REST API](#rest-api)
-    - [Model Training](#model-training)
-5. [Model Details](#model-details)
-6. [Contributing](#contributing)
-7. [License](#license)
+## Resumen del Proyecto
+El modelo T5 analiza instrucciones de RISC-V y proporcionar una sugerencia sobre los errores. El modelo está integrado con un servicio REST para su uso eficiente.
+Incluye:
+- Un servicio REST que procesa instrucciones ensambladoras y devuelve correcciones si se detectan errores.
+- Un modelo T5 preentrenado que ha sido adaptado para manejar instrucciones de RISC-V.
 
-## Project Overview
+## Requisitos
 
-This project implements a compiler for assembly language using the T5 model. The system focuses on detecting and correcting errors in RISC-V assembly instructions. It includes:
-- A REST service that processes assembly instructions and returns corrections if errors are detected.
-- A pre-trained T5 model that has been adapted to handle RISC-V instructions.
-- An interface for testing and validating assembly code.
-
-The system also provides extensibility for additional instruction sets and operand variations.
-
-## Requirements
-
-To run this project, you will need the following:
-- Python 3.8 or higher
-- TensorFlow or PyTorch (depending on your T5 model implementation)
-- Flask (for the REST API)
-- GPU support (optional but recommended for faster model inference)
-- The following Python libraries:
+Requisitos previos para su ejecucion:
+- Python 3.8 o superior
+- TensorFlow 
+- Flask (para la API REST)
+- Soporte para GPU (opcional pero es recomendado para entrenar más rápida el modelo)
+- Las siguientes librerías de Python:
   - `transformers`
-  - `torch` or `tensorflow`
+  - `torch` o `tensorflow`
   - `flask`
   - `requests`
 
-### Optional Dependencies
-- `gdbgui` for debugging assembly code
-
-## Installation
-
-1. Clone this repository:
+## Instalación
+1. Clona este repositorio:
     ```bash
-    git clone https://github.com/yourusername/T5_assembler_detection.git
+    git clone https://github.com/MASE98/ASMCompiler/tree/main/T5_model.git
     ```
-2. Navigate to the project directory:
+2. Navega al directorio del proyecto y descarga el modelo T5 entrenado:
     ```bash
-    cd T5_assembler_detection
+    cd T5_model
     ```
-3. Install the required Python dependencies:
+
+    ```bash
+    cd t5_trained_model
+    ```
+3. Instala las dependencias requeridas de Python:
     ```bash
     pip install -r requirements.txt
     ```
-4. Set up the environment for the T5 model by downloading the pre-trained weights or training a new model.
-
-## Usage
-
-### REST API
-To start the REST API server, run:
-```bash
-python app.py
