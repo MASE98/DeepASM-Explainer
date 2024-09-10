@@ -83,7 +83,8 @@ Este ejemplo es una suma de dos valores en lenguaje ensamblador que utiliza conj
     
         # return 
         jr ra
-    ``` 
+    ```
+     
 
 - Mediante el fichero que contenga el programa en lenguaje ensamblador y utilizando los comando expuesto en la ejecución local
 - Se obtendria algo como esto:
@@ -114,6 +115,10 @@ Este ejemplo es una suma de dos valores en lenguaje ensamblador que utiliza conj
                                     'newlines': [9, 19, 20, 37],
                                     't': 48},
 
+- Salida del servicio_REST:
 
+Verificando instrucción en línea 2: add rd rs1,
+ La instrucción 'add rd rs1,' es incorrecta.
+ Se sugiere: 'add rd rs1, rs2'
 
-
+Verificando instrucción en línea 3: li  rd imm
