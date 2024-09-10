@@ -2,7 +2,7 @@
 
 
 ## Tabla de Contenidos
-1. [Resumen del Proyecto](#resumen-del-proyecto)
+1. [Resumen](#resumen)
 2. [Requisitos](#requisitos)
 3. [Instalación](#instalación)
 
