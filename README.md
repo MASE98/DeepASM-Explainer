@@ -13,6 +13,7 @@ Este proyecto implementa estrategias de compilación para lenguaje ensamblador u
 - [Conclusión](#conclusión)
 
 
+
 ## Estructura del Proyecto
 
 - **main.py**: Archivo principal que ejecuta el compilador.
