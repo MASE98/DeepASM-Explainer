@@ -1,5 +1,5 @@
-# -ASM-Compiler
-Este proyecto implementa un compilador para ensamblador RISC-V que utiliza un modelo T5 para la detección y sugerencia de errores en el código. El compilador analiza instrucciones en ensamblador y proporciona una retroalimentación para corregir errores sintácticos. El compilador está diseñado para funcionar con la arquitectura RISC-V y ofrece una integracion mediante un servicio REST.
+# DeepASM-Explainer
+Este proyecto implementa estrategias de compilación para lenguaje ensamblador utilizando modelos LLM para la detección y sugerencia de errores en el código. Esta enfocado para el analisis de instrucciones en ensamblador RV32IMFD para proporcionar una retroalimentación sobre errores sintácticos al compilar mediante una integracion de un servicio REST.
 
 ## Tabla de Contenido
 
@@ -24,13 +24,21 @@ Este proyecto implementa un compilador para ensamblador RISC-V que utiliza un mo
 - **T5_model/**: Carpeta que contiene el modelo T5 entrenado para la sugerencias de instrucciones.
 - **text.s**: Ejemplo de código ensamblador utilizado para pruebas.
 
+![Diagrama de flujo](Images/Flujo_del_sistema.png)
+
 ## Requisitos
 
 - Python 3.8 o superior
-- Bibliotecas necesarias instalar mendiante `requirements.txt`:
+- Bibliotecas necesarias, guardar en un .txt con el nombre `requirements.txt`:
   - `transformers`
   - `torch`
   - `flask`
+
+
+**Instalación de requerimientos:**
+   ```bash
+   pip install -r requirements.txt
+   ```
   
 ## Instalación
 
@@ -41,11 +49,7 @@ Este proyecto implementa un compilador para ensamblador RISC-V que utiliza un mo
    ```bash
    cd ASMCompiler
    
-2. **Instalación de dependencia:**
-   ```bash
-   pip install -r requirements.txt
-
-3. **Utilizar el modelo entrendo en T5_model:**
+2. **Utilizar el modelo entrendo en T5_model:**
    ```bash
    cd T5_model
 
@@ -126,4 +130,4 @@ Verificando instrucción en línea 3: li  rd imm
 ```
 ## Conclusión
 
-Es una herramienta para la detección y corrección de errores en código ensamblador RISC-V, proporcionando una solución integrada con un modelo T5 para mejorar la precisión en el análisis de código con el servicio REST.
+Es una herramienta para la detección y corrección de errores en código ensamblador proporcionando una solución que esta integrada con un modelo LLM como T5 para mejorar la precisión en el análisis de código con el servicio REST.
