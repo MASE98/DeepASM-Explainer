@@ -29,7 +29,7 @@ Requisitos previos para su ejecucion:
 ## Instalación
 1. Clona este repositorio:
     ```bash
-    git clone https://github.com/MASE98/ASMCompiler/tree/main/T5_model.git
+    git clone https://github.com/MASE98/DeepASM-Explainer/tree/main/T5_model.git
     ```
 2. Navega al directorio del proyecto y descarga el modelo T5 entrenado:
     ```bash

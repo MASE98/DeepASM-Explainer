@@ -1,4 +1,4 @@
-# DeepASM-Explainer
+# DeepASM-Explainer: Compilation and analysis of instructions
 Este proyecto implementa estrategias de compilación para lenguaje ensamblador utilizando modelos LLM para la detección y sugerencia de errores en el código. Esta enfocado para el analisis de instrucciones en ensamblador RV32IMFD para proporcionar una retroalimentación sobre errores sintácticos al compilar mediante una integracion de un servicio REST.
 
 ## Tabla de Contenido
@@ -44,7 +44,7 @@ Este proyecto implementa estrategias de compilación para lenguaje ensamblador u
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone https://github.com/MASE98/ASMCompiler.git
+   git clone https://github.com/MASE98/DeepASM-Explainer.git
    ```
    ```bash
    cd ASMCompiler
@@ -63,7 +63,7 @@ Este proyecto implementa estrategias de compilación para lenguaje ensamblador u
    python3 servicio_rest.py
    ```
 
-- Luego se ejecutar el compilador localmente proporcionando un archivo ensamblador como entrada.
+- Luego se ejecuta el sistema localmente proporcionando un archivo ensamblador como entrada.
 
    ```bash
    python3 main.py text.s
@@ -71,7 +71,7 @@ Este proyecto implementa estrategias de compilación para lenguaje ensamblador u
 Esta ejecucion dara una respuesta que incluirá un análisis del código y una sugerencia en caso de detectar un error.
 
 ## Ejemplo
-Este ejemplo es una suma de dos valores en lenguaje ensamblador que utiliza conjunto de instrucciones RISC-V:
+Como ejemplo de lenguaje ensamblador tenemos una suma de dos valores que utiliza conjunto de instrucciones RISC-V:
 
     ```bash
     .text
@@ -80,7 +80,7 @@ Este ejemplo es una suma de dos valores en lenguaje ensamblador que utiliza conj
         li t0, 5
         li t1, 13
 
-        add t4, t0, t1  # 5+13
+        add t4, t0, t1  # t4 = 5+13
         
         mv a0, t4
         li a7, 1
@@ -90,9 +90,8 @@ Este ejemplo es una suma de dos valores en lenguaje ensamblador que utiliza conj
         jr ra
     ```
      
-
-- Mediante el fichero que contenga el programa en lenguaje ensamblador y utilizando los comando expuesto en la ejecución local
-- Se obtendria algo como esto:
+- El fichero que contenga el programa en lenguaje ensamblador y utilizando los comando expuesto en la ejecución local
+- Se obtendria un resultado donde se exprese la composición para el análisis y las sugerencias en caso de presentarse un error:
 
     ```bash
     [{'error': None,
@@ -120,7 +119,7 @@ Este ejemplo es una suma de dos valores en lenguaje ensamblador que utiliza conj
                                     'newlines': [9, 19, 20, 37],
                                     't': 48},
 
-- Salida del servicio_REST:
+- Salida del servicio_REST con las sugerencias con la ayuda del modello LLM (T5):
 ```bash
 Verificando instrucción en línea 2: add rd rs1,
  La instrucción 'add rd rs1,' es incorrecta.
