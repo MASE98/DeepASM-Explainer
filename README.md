@@ -24,7 +24,7 @@ Este proyecto implementa estrategias de compilación para lenguaje ensamblador u
 - **T5_model/**: Carpeta que contiene el modelo T5 entrenado para la sugerencias de instrucciones.
 - **text.s**: Ejemplo de código ensamblador utilizado para pruebas.
 
-![Diagrama de flujo](Images/Flujo_del_sistema.png)
+![Diagrama de flujo](Imagenes/Flujo_del_sistema.png)
 
 ## Requisitos
 
