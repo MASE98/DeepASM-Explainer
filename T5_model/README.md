@@ -12,7 +12,7 @@ Incluye:
 - Un servicio REST que procesa instrucciones ensambladoras y devuelve correcciones si se detectan errores.
 - Un modelo T5 preentrenado que ha sido adaptado para manejar instrucciones de RISC-V.
 
-![Diagrama de flujo](Images/Flujo_model_REST.png)
+![Diagrama de flujo](./assets/Flujo_model_REST.png)
 
 ## Requisitos
 
